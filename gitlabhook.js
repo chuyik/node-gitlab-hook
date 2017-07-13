@@ -185,8 +185,12 @@ function serverHandler(req, res) {
   var buffer = [];
   var bufferLength = 0;
   var failed = false;
-  var remoteAddress = req.ip || req.socket.remoteAddress ||
-    req.socket.socket.remoteAddress;
+  var remoteAddress =
+        req.headers['x-real-ip'] ||
+        req.headers['x-forwarded-for'] ||
+        req.ip ||
+        req.socket.remoteAddress ||
+        req.socket.socket.remoteAddress;
 
   req.on('data', function (chunk) {
     if (failed) return;
